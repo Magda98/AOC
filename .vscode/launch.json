@@ -8,11 +8,11 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "runtimeArgs": ["--import", "tsx", "--no-warnings", "--max-old-space-size=16096"],
       "skipFiles": ["<node_internals>/**"],
       "program": "${file}",
       "outFiles": ["${workspaceFolder}/**/*.js"],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "runtimeVersion": "24.10.0"
     }
   ]
 }
