@@ -1,17 +1,18 @@
 import fs from 'fs';
 
-const filepath = new URL('day8test.txt', import.meta.url);
+const filepath = new URL('day8.txt', import.meta.url);
 const data = await fs.promises.readFile(filepath, 'utf8');
 const dataArray = data.split('\n').map((line) => line.split(','));
 
 const pairs: Array<{ i: number; j: number; dist: number }> = [];
 for (let i = 0; i < dataArray.length; i++) {
-  for (let j = i + 1; j < dataArray.length; j++) {
-    pairs.push({
-      i,
-      j,
-      dist: distance(dataArray[i].map(Number), dataArray[j].map(Number)),
-    });
+  for (let j = i; j < dataArray.length; j++) {
+    if (i !== j)
+      pairs.push({
+        i,
+        j,
+        dist: distance(dataArray[i].map(Number), dataArray[j].map(Number)),
+      });
   }
 }
 
@@ -46,13 +47,28 @@ class UnionFind {
     return true;
   }
 }
-
+const N = dataArray.length;
 let connections = 0;
+let i: number[] = [];
+let j: number[] = [];
 const uf = new UnionFind(dataArray.length);
-for (const pair of pairs) {
-  uf.union(pair.i, pair.j);
-  connections++;
-  if (connections === dataArray.length) break;
+for (const [index, pair] of pairs.entries()) {
+  //part 1 (stop after 1000 connections)
+  // if (index === 1000) {
+  //   break;
+  // }
+  if (uf.union(pair.i, pair.j)) {
+    connections++;
+
+    if (connections === N - 1) {
+      const x_i = Number(dataArray[pair.i][0]);
+      const x_j = Number(dataArray[pair.j][0]);
+
+      const result = x_i * x_j;
+      console.log('part 2:', result);
+      break;
+    }
+  }
 }
 
 const circuits = new Map<number, number>();
